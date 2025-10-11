@@ -1,3 +1,4 @@
+
 from pygame import *
 from time import sleep, time as timer
 from random import randint
@@ -56,10 +57,40 @@ ball = GameSprite('ball (4).png', 200, 200, 50, 50, 4)
 fps = 120
 clock = time.Clock()
 game = True 
+
+speed_x = 3
+speed_y = 3
+
+finish = False
+
+font.init()
+font = font.Font(None, 36)
+win1 = font.render('player 1 wins ', True, (180, 0, 0))
+win2 = font.render('player 2 wins ', True, (180, 0, 0))
+
 while game :
     for e in event.get():
         if e.type == QUIT:
             game = False
+    if finish != True:
+        window.fill((100,200,150))
+        ball.rect.x += speed_x
+        ball.rect.y += speed_y
+
+
+        if ball.rect.y > h-50 or ball.rect.y < 0 :
+            speed_y *= -1
+
+        if sprite.collide_rect(p1, ball) or sprite.collide_rect(p2, ball):
+            speed_x *= -1
+
+        if ball.rect.x > w-50:
+            finish = True
+            window.blit(win1, (200, 200))
+
+        if ball.rect.x < 0:
+            finish = True
+            window.blit(win2, (200, 200))
 
 
 
@@ -68,14 +99,13 @@ while game :
 
 
 
+        p2.update_l()
+        p1.update_r()
 
-    p2.update_l()
-    p1.update_r()
 
-    window.fill((100,200,150))
-    p1.reset()
-    p2.reset()
-    ball.reset()
+        p1.reset()
+        p2.reset()
+        ball.reset()
 
 
     display.update()
